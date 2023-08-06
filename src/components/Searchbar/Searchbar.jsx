@@ -14,14 +14,14 @@ class Searchbar extends Component {
     this.props.onSubmit(this.state);
   };
 
-  changeInput = e => {
+  handleСhange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
   render() {
     const { filter } = this.state;
-    const { handleSubmit, changeInput } = this;
+    const { handleSubmit, handleСhange } = this;
 
     return (
       <header className={styles.searchbar}>
@@ -32,7 +32,7 @@ class Searchbar extends Component {
 
           <input
             className={styles.input}
-            onChange={changeInput}
+            onChange={handleСhange}
             name="filter"
             value={filter}
             type="text"
