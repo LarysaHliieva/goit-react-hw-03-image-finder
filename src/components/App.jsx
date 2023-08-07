@@ -54,19 +54,25 @@ export class App extends Component {
   };
 
   render() {
-    const { items, loading, error, residual } = this.state;
+    const { items, filter, loading, error, residual } = this.state;
+    const isNotFound = !Boolean(items.length) && filter && !loading;
 
     return (
       <div className={styles.app}>
         <Searchbar onSubmit={this.onSearch} />
         {Boolean(items.length) && <ImageGallery items={items} />}
         {error && (
-          <p className={styles.errorMassage}>
+          <p className={styles.message}>
             😥 Something went wrong... Please, reload and try again!
           </p>
         )}
         <Loader visible={loading} />
         {residual > 0 && <Button onClick={this.loadMore} />}
+        {isNotFound && (
+          <p className={styles.message}>
+            🙄 Sorry... Nothing was found for your request.
+          </p>
+        )}
       </div>
     );
   }
