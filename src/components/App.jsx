@@ -27,6 +27,12 @@ export class App extends Component {
     if (prevState.filter !== filter || prevState.page !== page) {
       this.fetchImages();
     }
+
+    if (this.state.items.length > 0) {
+      const gallery = document.querySelector('#gallery');
+
+      this.smoothScroll(gallery);
+    }
   }
 
   async fetchImages() {
@@ -55,6 +61,15 @@ export class App extends Component {
     this.setState({ filter, items: [], page: 1, residue: 0 });
   };
 
+  smoothScroll(gallery) {
+    const { height: cardHeight } =
+      gallery.firstElementChild.getBoundingClientRect();
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+  }
+
   render() {
     const { items, filter, loading, error, residue } = this.state;
     const isNotFound = !Boolean(items.length) && filter && !loading;
@@ -73,7 +88,7 @@ export class App extends Component {
 
         <Loader visible={loading} />
 
-        {residue > 0 && <Button onClick={this.loadMore} />}
+        {residue > 0 && <Button onClick={this.loadMore} disabled={loading} />}
 
         {isNotFound && (
           <p className={styles.message}>
