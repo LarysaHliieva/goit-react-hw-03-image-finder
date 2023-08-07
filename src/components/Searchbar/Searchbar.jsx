@@ -2,6 +2,8 @@ import { Component } from 'react';
 
 import PropTypes from 'prop-types';
 
+import { ReactComponent as SearchIcon } from 'icons/icon-search.svg';
+
 import styles from './Searchbar.module.css';
 
 class Searchbar extends Component {
@@ -27,6 +29,7 @@ class Searchbar extends Component {
       <header className={styles.searchbar}>
         <form className={styles.form} onSubmit={handleSubmit}>
           <button type="submit" className={styles.button}>
+            <SearchIcon width="24" height="24" fill="#808080" />
             <span className={styles.buttonLabel}>Search</span>
           </button>
 
