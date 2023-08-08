@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -21,17 +21,17 @@ export class App extends Component {
     residue: 0,
   };
 
+  galleryRef = React.createRef();
+
   async componentDidUpdate(prevProps, prevState) {
-    const { filter, page } = this.state;
+    const { filter, page, items } = this.state;
 
     if (prevState.filter !== filter || prevState.page !== page) {
       this.fetchImages();
     }
 
-    if (this.state.items.length > 0) {
-      const gallery = document.querySelector('#gallery');
-
-      this.smoothScroll(gallery);
+    if (items.length > prevState.items.length) {
+      this.smoothScroll();
     }
   }
 
@@ -58,12 +58,16 @@ export class App extends Component {
   };
 
   onSearch = ({ filter }) => {
+    if (filter === this.state.filter && this.state.page === 1) {
+      return;
+    }
+
     this.setState({ filter, items: [], page: 1, residue: 0 });
   };
 
-  smoothScroll(gallery) {
+  smoothScroll() {
     const { height: cardHeight } =
-      gallery.firstElementChild.getBoundingClientRect();
+      this.galleryRef.current.firstElementChild.firstElementChild.getBoundingClientRect();
     window.scrollBy({
       top: cardHeight * 2,
       behavior: 'smooth',
@@ -78,7 +82,9 @@ export class App extends Component {
       <div className={styles.app}>
         <Searchbar onSubmit={this.onSearch} />
 
-        {Boolean(items.length) && <ImageGallery items={items} />}
+        <div ref={this.galleryRef}>
+          {Boolean(items.length) && <ImageGallery items={items} />}
+        </div>
 
         {error && (
           <p className={styles.message}>
